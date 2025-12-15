@@ -15,7 +15,7 @@
 
     <form method="post" action="{{ route('profile.update') }}" class="space-y-5">
         @csrf @method('patch')
-        
+
         <div>
             <label for="name" class="block text-sm font-medium text-slate-700 mb-2">Nama</label>
             <input id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name"
@@ -54,7 +54,7 @@
             </button>
 
             @if (session('status') === 'profile-updated')
-                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" 
+                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-emerald-600 font-medium">Tersimpan.</p>
             @endif
         </div>

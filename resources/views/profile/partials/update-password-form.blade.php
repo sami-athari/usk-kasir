@@ -13,7 +13,7 @@
 
     <form method="post" action="{{ route('password.update') }}" class="space-y-5">
         @csrf @method('put')
-        
+
         <div>
             <label for="update_password_current_password" class="block text-sm font-medium text-slate-700 mb-2">Password Saat Ini</label>
             <input id="update_password_current_password" name="current_password" type="password" autocomplete="current-password"
@@ -47,7 +47,7 @@
             </button>
 
             @if (session('status') === 'password-updated')
-                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)" 
+                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
                     class="text-sm text-emerald-600 font-medium">Tersimpan.</p>
             @endif
         </div>

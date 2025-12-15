@@ -15,22 +15,22 @@
 </head>
 <body class="bg-[#F8FAFC] text-slate-700 antialiased min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
-        <!-- Logo -->
-        <div class="text-center mb-8">
+
+        <div class="text-center mb-10">
             <a href="/" class="inline-flex items-center gap-3 group">
-                <div class="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
-                    <span class="text-2xl">☕</span>
-                </div>
-                <span class="text-2xl font-bold text-slate-800">Family<span class="text-emerald-500">Cafe.</span></span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-500" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.0002 11.2426L7.75752 6.99998L6.34331 8.41419L12.0002 14.0711L17.657 8.41419L16.2428 6.99998L12.0002 11.2426Z" opacity="0.5"/>
+                    <path d="M6 15C6 13.3431 7.34315 12 9 12H15C16.6569 12 18 13.3431 18 15V19C18 20.6569 16.6569 22 15 22H9C7.34315 22 6 20.6569 6 19V15Z" />
+                    <path d="M9 2C9 3.65685 10.3431 5 12 5C13.6569 5 15 3.65685 15 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="text-3xl font-bold tracking-tight text-slate-800">Family<span class="text-emerald-500">Cafe.</span></span>
             </a>
         </div>
 
-        <!-- Card -->
-        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-8 sm:p-10">
             {{ $slot }}
         </div>
 
-        <!-- Footer -->
         <p class="text-center text-sm text-slate-400 mt-8">© {{ date('Y') }} FamilyCafe. All rights reserved.</p>
     </div>
 </body>

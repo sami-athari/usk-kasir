@@ -30,10 +30,10 @@
                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                
+
                 <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
                     @csrf @method('delete')
-                    
+
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600">
@@ -44,11 +44,11 @@
                             <h3 class="text-lg font-semibold text-slate-800">Yakin ingin menghapus akun?</h3>
                         </div>
                     </div>
-                    
+
                     <p class="text-sm text-slate-500 mb-6">
                         Setelah akun Anda dihapus, semua sumber daya dan data akan dihapus secara permanen. Silakan masukkan password Anda untuk mengonfirmasi.
                     </p>
-                    
+
                     <div class="mb-6">
                         <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
                         <input id="password" name="password" type="password" placeholder="Masukkan password Anda"
@@ -57,7 +57,7 @@
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div class="flex justify-end gap-3">
                         <button type="button" @click="showModal = false" class="px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors">
                             Batal
