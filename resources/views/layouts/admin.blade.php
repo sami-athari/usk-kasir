@@ -1,10 +1,19 @@
 ﻿<!DOCTYPE html>
-<html lang="id">
+<html lang="id" x-data="{ darkMode: $persist(false).as('dark_mode') }" :class="{ 'dark': darkMode }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Cafe Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -13,18 +22,22 @@
         body { font-family: 'Outfit', sans-serif; }
         [x-cloak] { display: none !important; }
 
-        /* Custom Scrollbar agar tidak merusak pemandangan */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-track { background: #1e293b; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
+
 </head>
-<body class="bg-[#F8FAFC] text-slate-700 antialiased">
+<body class="bg-[#F8FAFC] dark:bg-slate-900 text-slate-700 dark:text-slate-200 antialiased transition-colors duration-300">
 
     <div class="flex min-h-screen">
 
-        <aside class="w-72 bg-white fixed inset-y-0 left-0 z-20 flex flex-col border-r border-dashed border-slate-200">
+        <aside class="w-72 bg-white dark:bg-slate-800 fixed inset-y-0 left-0 z-20 flex flex-col border-r border-dashed border-slate-200 dark:border-slate-700">
 
             <div class="h-24 flex items-center px-8">
                 <div class="flex items-center gap-3">
@@ -33,15 +46,15 @@
                         <path d="M6 15C6 13.3431 7.34315 12 9 12H15C16.6569 12 18 13.3431 18 15V19C18 20.6569 16.6569 22 15 22H9C7.34315 22 6 20.6569 6 19V15Z" />
                         <path d="M9 2C9 3.65685 10.3431 5 12 5C13.6569 5 15 3.65685 15 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
-                    <span class="text-xl font-bold tracking-tight text-slate-800">Family<span class="text-emerald-500">Cafe.</span></span>
+                    <span class="text-xl font-bold tracking-tight text-slate-800 dark:text-white">Family<span class="text-emerald-500">Cafe.</span></span>
                 </div>
             </div>
 
            <nav class="flex-1 px-6 py-4 space-y-6 overflow-y-auto">
 
     <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 pl-2">Overview</p>
-        <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.dashboard') ? 'text-emerald-600 font-bold translate-x-2' : 'text-slate-500 hover:text-emerald-500 hover:translate-x-2' }}">
+        <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 pl-2">Overview</p>
+        <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.dashboard') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
             </svg>
@@ -50,9 +63,9 @@
     </div>
 
     <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 pl-2">Master Data</p>
+        <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 pl-2">Master Data</p>
 
-        <a href="{{ route('admin.ingredients.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.products.*') ? 'text-emerald-600 font-bold translate-x-2' : 'text-slate-500 hover:text-emerald-500 hover:translate-x-2' }}">
+        <a href="{{ route('admin.ingredients.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.ingredients.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
@@ -60,7 +73,7 @@
         </a>
 
 
-<a href="{{ route('admin.products.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.products.*') ? 'text-emerald-600 font-bold translate-x-2' : 'text-slate-500 hover:text-emerald-500 hover:translate-x-2' }}">
+<a href="{{ route('admin.products.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.products.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
@@ -69,7 +82,7 @@
 
 
 
-        <a href="{{ route('admin.categories.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.categories.*') ? 'text-emerald-600 font-bold translate-x-2' : 'text-slate-500 hover:text-emerald-500 hover:translate-x-2' }}">
+        <a href="{{ route('admin.categories.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.categories.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
             </svg>
@@ -78,10 +91,10 @@
     </div>
 
     <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 pl-2">Keuangan</p>
+        <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 pl-2">Keuangan</p>
 
         @if (config('features.pengeluaran_admin'))
-        <a href="{{ route('admin.expenses.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.expenses.*') ? 'text-emerald-600 font-bold translate-x-2' : 'text-slate-500 hover:text-emerald-500 hover:translate-x-2' }}">
+        <a href="{{ route('admin.expenses.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.expenses.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z" />
             </svg>
@@ -89,7 +102,7 @@
         </a>
         @endif
 
-        <a href="{{ route('admin.finance.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.finance.*') ? 'text-emerald-600 font-bold translate-x-2' : 'text-slate-500 hover:text-emerald-500 hover:translate-x-2' }}">
+        <a href="{{ route('admin.finance.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.finance.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
@@ -97,9 +110,27 @@
         </a>
     </div>
 
+    {{-- DARK MODE TOGGLE BUTTON - START --}}
+    <div class="pt-4 border-t border-dashed border-slate-200 dark:border-slate-700">
+        <button @click="darkMode = !darkMode" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:translate-x-2 w-full">
+            <template x-if="!darkMode">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </template>
+            <template x-if="darkMode">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </template>
+            <span class="text-base" x-text="darkMode ? 'Light Mode' : 'Dark Mode'"></span>
+        </button>
+    </div>
+    {{-- DARK MODE TOGGLE BUTTON - END --}}
+
 </nav>
 
-            <div class="p-8 border-t border-dashed border-slate-200">
+            <div class="p-8 border-t border-dashed border-slate-200 dark:border-slate-700">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button class="flex items-center gap-3 text-slate-400 hover:text-red-500 transition-colors w-full group">
@@ -115,14 +146,14 @@
         <main class="flex-1 ml-72 p-10 lg:p-14 transition-all">
             <div class="flex justify-between items-center mb-10">
                 <div>
-                   <p class="text-sm text-slate-400">Admin Portal / <span class="text-emerald-600 font-medium">Home</span></p>
+                   <p class="text-sm text-slate-400 dark:text-slate-500">Admin Portal / <span class="text-emerald-600 dark:text-emerald-400 font-medium">Home</span></p>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
-                        <p class="text-sm font-bold text-slate-700">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-slate-400">Super Admin</p>
+                        <p class="text-sm font-bold text-slate-700 dark:text-slate-200">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Super Admin</p>
                     </div>
-                    <div class="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg border-2 border-white shadow-sm">
+                    <div class="h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg border-2 border-white dark:border-slate-700 shadow-sm">
                         {{ substr(Auth::user()->name, 0, 1) }}
                     </div>
                 </div>

@@ -4,8 +4,8 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
         <div>
-            <h1 class="text-4xl font-light text-slate-800 tracking-tight">Daftar <span class="font-bold">Menu</span></h1>
-            <p class="text-slate-500 mt-2">Kelola produk yang dijual di cafe Anda.</p>
+            <h1 class="text-4xl font-light text-slate-800 dark:text-white tracking-tight">Daftar <span class="font-bold">Menu</span></h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Kelola produk yang dijual di cafe Anda.</p>
         </div>
         <a href="{{ route('admin.products.create') }}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-emerald-500/20 transition-all duration-300 hover:shadow-emerald-500/40 hover:-translate-y-0.5">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -17,7 +17,7 @@
 
     <!-- Success Message -->
     @if(session('success'))
-    <div class="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-2xl flex items-center gap-3">
+    <div class="mb-6 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 px-6 py-4 rounded-2xl flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
         </svg>
@@ -26,22 +26,22 @@
     @endif
 
     <!-- Category Filter -->
-    <div class="mb-8 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 inline-flex flex-wrap gap-2">
-        <button @click="activeCategory = 'all'" :class="activeCategory === 'all' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'" class="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300">
+    <div class="mb-8 bg-white dark:bg-slate-800 p-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 inline-flex flex-wrap gap-2">
+        <button @click="activeCategory = 'all'" :class="activeCategory === 'all' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'" class="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300">
             Semua
         </button>
         @foreach($categories as $cat)
-        <button @click="activeCategory = '{{ $cat->id }}'" :class="activeCategory === '{{ $cat->id }}' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'" class="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300">
+        <button @click="activeCategory = '{{ $cat->id }}'" :class="activeCategory === '{{ $cat->id }}' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'" class="px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300">
             {{ $cat->icon }} {{ $cat->name }}
         </button>
         @endforeach
     </div>
 
     <!-- Table Card -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
         <table class="w-full">
             <thead>
-                <tr class="border-b border-slate-100">
+                <tr class="border-b border-slate-100 dark:border-slate-700">
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Produk</th>
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Kategori</th>
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Harga</th>
@@ -49,31 +49,31 @@
                     <th class="text-right px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                 @forelse($products as $product)
-                <tr x-show="activeCategory === 'all' || activeCategory === '{{ $product->category_id }}'" x-transition class="hover:bg-slate-50/50 transition-colors">
+                <tr x-show="activeCategory === 'all' || activeCategory === '{{ $product->category_id }}'" x-transition class="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div class="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-700 flex items-center justify-center overflow-hidden flex-shrink-0">
                                 @if($product->image)
                                 <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                                 @else
                                 <span class="text-2xl">☕</span>
                                 @endif
                             </div>
-                            <span class="font-medium text-slate-800">{{ $product->name }}</span>
+                            <span class="font-medium text-slate-800 dark:text-white">{{ $product->name }}</span>
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-medium">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-medium">
                             {{ $product->category->name ?? '-' }}
                         </span>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="font-semibold text-emerald-600">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                        <span class="font-semibold text-emerald-600 dark:text-emerald-400">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="text-slate-600">{{ $product->stock }}</span>
+                        <span class="text-slate-600 dark:text-slate-300">{{ $product->stock }}</span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center justify-end gap-3">
@@ -97,9 +97,9 @@
                 <tr>
                     <td colspan="5" class="px-6 py-16">
                         <div class="text-center">
-                            <div class="w-16 h-16 mx-auto rounded-full bg-slate-50 flex items-center justify-center text-3xl mb-4">☕</div>
-                            <h3 class="text-lg font-semibold text-slate-800 mb-1">Belum Ada Produk</h3>
-                            <p class="text-slate-500 mb-6">Mulai dengan menambahkan menu pertama untuk cafe Anda.</p>
+                            <div class="w-16 h-16 mx-auto rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-3xl mb-4">☕</div>
+                            <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-1">Belum Ada Produk</h3>
+                            <p class="text-slate-500 dark:text-slate-400 mb-6">Mulai dengan menambahkan menu pertama untuk cafe Anda.</p>
                             <a href="{{ route('admin.products.create') }}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-medium transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
