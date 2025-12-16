@@ -28,16 +28,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // --- LOGIKA REDIRECT BERDASARKAN ROLE ---
-
-        $role = $request->user()->role;
-
-        if ($role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        // Jika user biasa, kembalikan ke halaman menu utama
-        return redirect()->route('order.index');
+        // Redirect standard (Breeze): dashboard akan mengarahkan sesuai role.
+        return redirect()->route('dashboard');
     }
 
     /**

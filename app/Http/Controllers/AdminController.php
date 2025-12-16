@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 use App\Models\Order;
+use App\Models\Product;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -27,8 +29,16 @@ class AdminController extends Controller
         $yearOrders = Order::whereYear('created_at', now()->year)->count();
         $yearOmset = Order::whereYear('created_at', now()->year)->sum('total_price');
 
-        // Stok menipis (produk dengan stok rendah)
-        $lowStockProducts = \App\Models\Product::where('stock', '<', 10)->get();
+        // ====== QUICK LIST MENU & KATEGORI ======
+        $latestProducts = Product::with('category')
+            ->orderByDesc('created_at')
+            ->take(3)
+            ->get();
+
+        $topCategories = Category::withCount('products')
+            ->orderByDesc('products_count')
+            ->take(3)
+            ->get();
 
         // ====== HISTORY PESANAN ======
         // Ambil semua pesanan terbaru (untuk history)
@@ -37,16 +47,6 @@ class AdminController extends Controller
             ->take(20) // Ambil 20 pesanan terakhir
             ->get();
 
-        // ====== DATA GRAFIK OMSET 7 HARI TERAKHIR ======
-        $chartData = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $chartData[] = [
-                'date' => $date->translatedFormat('D'),
-                'total' => Order::whereDate('created_at', $date)->sum('total_price'),
-            ];
-        }
-
         return view('admin.dashboard', compact(
             'todayOrders',
             'todayOmset',
@@ -54,9 +54,9 @@ class AdminController extends Controller
             'monthOmset',
             'yearOrders',
             'yearOmset',
-            'lowStockProducts',
             'orders',
-            'chartData'
+            'latestProducts',
+            'topCategories'
         ));
     }
 }

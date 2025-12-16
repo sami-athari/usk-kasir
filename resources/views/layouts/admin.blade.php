@@ -13,6 +13,7 @@
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -35,9 +36,9 @@
 </head>
 <body class="bg-[#F8FAFC] dark:bg-slate-900 text-slate-700 dark:text-slate-200 antialiased transition-colors duration-300">
 
-    <div class="flex min-h-screen">
+    <div class="flex flex-col lg:flex-row min-h-screen">
 
-        <aside class="w-72 bg-white dark:bg-slate-800 fixed inset-y-0 left-0 z-20 flex flex-col border-r border-dashed border-slate-200 dark:border-slate-700">
+        <aside class="w-full lg:w-72 bg-white dark:bg-slate-800 relative lg:fixed lg:inset-y-0 lg:left-0 z-20 flex flex-col border-r border-dashed border-slate-200 dark:border-slate-700">
 
             <div class="h-24 flex items-center px-8">
                 <div class="flex items-center gap-3">
@@ -60,17 +61,24 @@
             </svg>
             <span class="text-base">Dashboard</span>
         </a>
+
+        <a href="{{ route('admin.orders.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.orders.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-base">Transaksi</span>
+        </a>
     </div>
 
     <div>
         <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 pl-2">Master Data</p>
 
-        <a href="{{ route('admin.ingredients.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.ingredients.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
+        {{-- <a href="{{ route('admin.ingredients.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.ingredients.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
             <span class="text-base">Gudang bahan</span>
-        </a>
+        </a> --}}
 
 
 <a href="{{ route('admin.products.index') }}" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 {{ request()->routeIs('admin.products.*') ? 'text-emerald-600 dark:text-emerald-400 font-bold translate-x-2' : 'text-slate-500 dark:text-slate-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:translate-x-2' }}">
@@ -90,7 +98,7 @@
         </a>
     </div>
 
-    <div>
+    {{-- <div>
         <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4 pl-2">Keuangan</p>
 
         @if (config('features.pengeluaran_admin'))
@@ -108,10 +116,10 @@
             </svg>
             <span class="text-base">Laporan Keuangan</span>
         </a>
-    </div>
+    </div> --}}
 
     {{-- DARK MODE TOGGLE BUTTON - START --}}
-    <div class="pt-4 border-t border-dashed border-slate-200 dark:border-slate-700">
+    {{-- <div class="pt-4 border-t border-dashed border-slate-200 dark:border-slate-700">
         <button @click="darkMode = !darkMode" class="group flex items-center gap-4 px-2 py-3 rounded-xl transition-all duration-300 text-slate-500 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:translate-x-2 w-full">
             <template x-if="!darkMode">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -125,13 +133,13 @@
             </template>
             <span class="text-base" x-text="darkMode ? 'Light Mode' : 'Dark Mode'"></span>
         </button>
-    </div>
+    </div> --}}
     {{-- DARK MODE TOGGLE BUTTON - END --}}
 
 </nav>
 
             <div class="p-8 border-t border-dashed border-slate-200 dark:border-slate-700">
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" data-confirm-logout>
                     @csrf
                     <button class="flex items-center gap-3 text-slate-400 hover:text-red-500 transition-colors w-full group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -143,8 +151,8 @@
             </div>
         </aside>
 
-        <main class="flex-1 ml-72 p-10 lg:p-14 transition-all">
-            <div class="flex justify-between items-center mb-10">
+        <main class="flex-1 ml-0 lg:ml-72 p-6 sm:p-8 lg:p-14 transition-all">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-10">
                 <div>
                    <p class="text-sm text-slate-400 dark:text-slate-500">Admin Portal / <span class="text-emerald-600 dark:text-emerald-400 font-medium">Home</span></p>
                 </div>
@@ -163,6 +171,40 @@
         </main>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('form[data-confirm-logout]').forEach((form) => {
+                form.addEventListener('submit', async (event) => {
+                    if (form.dataset.confirmed === '1') return;
+
+                    event.preventDefault();
+
+                    const title = form.getAttribute('data-confirm-title') || 'Yakin logout?';
+                    const text = form.getAttribute('data-confirm-text') || 'Kamu akan keluar dari akun ini.';
+
+                    if (window.Swal && typeof Swal.fire === 'function') {
+                        const result = await Swal.fire({
+                            icon: 'question',
+                            title,
+                            text,
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya, Logout',
+                            cancelButtonText: 'Batal',
+                            confirmButtonColor: '#ef4444'
+                        });
+
+                        if (!result.isConfirmed) return;
+                    } else {
+                        const ok = window.confirm(`${title}\n\n${text}`);
+                        if (!ok) return;
+                    }
+
+                    form.dataset.confirmed = '1';
+                    form.submit();
+                });
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

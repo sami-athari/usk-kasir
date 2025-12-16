@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
 
         <div class="relative group">
             <div class="absolute inset-0 bg-blue-100 rounded-3xl transform translate-x-2 translate-y-2 transition-transform group-hover:translate-x-1 group-hover:translate-y-1"></div>
@@ -49,47 +49,64 @@
                 </svg>
             </div>
         </div>
-
-        <div class="relative group">
-            <div class="absolute inset-0 bg-orange-100 rounded-3xl transform translate-x-2 translate-y-2 transition-transform group-hover:translate-x-1 group-hover:translate-y-1"></div>
-            <div class="relative bg-white rounded-3xl p-8 border border-slate-100 shadow-sm flex items-start justify-between overflow-hidden">
-                <div>
-                    <p class="text-slate-400 font-medium text-sm uppercase tracking-wider mb-1">Stok Kritis</p>
-                    <h3 class="text-4xl font-bold text-orange-500">{{ $lowStockProducts->count() }}</h3>
-                    <p class="text-xs text-slate-400 mt-2 flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-orange-400"></span> Perlu Restock
-                    </p>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-orange-500 opacity-20 -mr-4 -mt-4 transform group-hover:scale-110 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/>
-                </svg>
-            </div>
-        </div>
     </div>
 
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
 
-        <div class="xl:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-xl font-bold text-slate-800">Grafik Penjualan</h3>
-                <span class="text-xs text-slate-400 font-mono bg-slate-50 px-2 py-1 rounded">LAST 7 DAYS</span>
-            </div>
-
-            <div class="flex items-end justify-between h-56 gap-4">
-                @foreach($chartData as $data)
-                <div class="flex flex-col items-center gap-3 w-full group">
-                    <div class="relative w-full flex items-end justify-center h-full">
-                        <div style="height: {{ $data['total'] > 0 ? ($data['total'] / (collect($chartData)->max('total') ?: 1)) * 100 : 2 }}%"
-                             class="w-3 md:w-4 bg-slate-200 rounded-full group-hover:bg-emerald-500 transition-all duration-500 relative">
-
-                             <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                                {{ number_format($data['total']/1000, 0) }}k
-                             </div>
-                        </div>
+        <div class="xl:col-span-2">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-slate-800">Daftar Menu</h3>
+                        <a href="{{ route('admin.products.create') }}" class="text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-xl transition-colors">Tambah</a>
                     </div>
-                    <span class="text-[10px] uppercase font-bold text-slate-400 group-hover:text-emerald-600">{{ \Carbon\Carbon::parse($data['date'])->format('D') }}</span>
+
+                    <div class="space-y-3">
+                        @forelse($latestProducts as $product)
+                        <div class="flex items-center justify-between gap-4 p-3 rounded-2xl border border-slate-100 bg-white">
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-slate-700 truncate">{{ $product->name }}</p>
+                                <p class="text-xs text-slate-400 truncate">{{ $product->category->name ?? '-' }}</p>
+                            </div>
+                            <div class="shrink-0 text-right">
+                                <p class="text-sm font-bold text-emerald-600">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                <p class="text-[10px] text-slate-400">Stok: {{ $product->stock }}</p>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="text-center py-10 text-slate-400 text-sm">Belum ada menu</div>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-dashed border-slate-100 text-center">
+                        <a href="{{ route('admin.products.index') }}" class="text-sm font-medium text-emerald-500 hover:text-emerald-700">Lihat lebih lanjut &rarr;</a>
+                    </div>
                 </div>
-                @endforeach
+
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-slate-800">Kategori</h3>
+                        <a href="{{ route('admin.categories.create') }}" class="text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-xl transition-colors">Tambah</a>
+                    </div>
+
+                    <div class="space-y-3">
+                        @forelse($topCategories as $cat)
+                        <div class="flex items-center justify-between gap-4 p-3 rounded-2xl border border-slate-100 bg-white">
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-slate-700 truncate">{{ $cat->icon ?? '📁' }} {{ $cat->name }}</p>
+                                <p class="text-xs text-slate-400">{{ $cat->products_count ?? 0 }} produk</p>
+                            </div>
+                            <a href="{{ route('admin.categories.edit', $cat->id) }}" class="text-xs text-slate-500 hover:text-emerald-600">Edit</a>
+                        </div>
+                        @empty
+                        <div class="text-center py-10 text-slate-400 text-sm">Belum ada kategori</div>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-dashed border-slate-100 text-center">
+                        <a href="{{ route('admin.categories.index') }}" class="text-sm font-medium text-emerald-500 hover:text-emerald-700">Lihat lebih lanjut &rarr;</a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -100,8 +117,12 @@
                 @forelse($orders->take(4) as $order)
                 <div class="flex items-center justify-between group">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-lg shadow-inner">
-                            🍵
+                        @php
+                            $customerName = $order->user->name ?? 'Guest';
+                            $initial = strtoupper(mb_substr($customerName, 0, 1));
+                        @endphp
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm border-2 border-white shadow-sm">
+                            {{ $initial }}
                         </div>
                         <div>
                             <p class="text-sm font-bold text-slate-700">{{ $order->user->name ?? 'Guest' }}</p>
@@ -119,25 +140,10 @@
             </div>
 
             <div class="mt-8 pt-6 border-t border-dashed border-slate-100 text-center">
-                <a href="#" class="text-sm font-medium text-emerald-500 hover:text-emerald-700">Lihat Semua Transaksi &rarr;</a>
+                <a href="{{ route('admin.orders.index') }}" class="text-sm font-medium text-emerald-500 hover:text-emerald-700">Lihat Semua Transaksi &rarr;</a>
             </div>
         </div>
 
     </div>
-
-    @if($lowStockProducts->count() > 0)
-    <div class="mt-8 bg-orange-50 border border-orange-100 rounded-2xl p-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="p-2 bg-orange-100 rounded-full text-orange-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <span class="text-sm text-orange-800 font-medium">Ada {{ $lowStockProducts->count() }} item yang stoknya menipis.</span>
-        </div>
-        <a href="{{ route('admin.products.index') }}" class="text-xs bg-white border border-orange-200 text-orange-600 px-3 py-1.5 rounded-lg hover:shadow-sm">Cek Gudang</a>
-    </div>
-    @endif
-
 </div>
 @endsection

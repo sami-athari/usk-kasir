@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Family Cafe')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -27,8 +28,17 @@
         .dark ::-webkit-scrollbar-track { background: #1e293b; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
         .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        @media print {
+            nav, footer, .print\:hidden { display: none !important; }
+            html, body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+            main { padding: 0 !important; max-width: none !important; width: 100% !important; }
+
+            .receipt-container { max-width: none !important; width: 100% !important; margin: 0 !important; }
+            .receipt-card { border: none !important; box-shadow: none !important; border-radius: 0 !important; }
+        }
     </style>
-    
+
 </head>
 <body x-data="globalState" class="bg-[#F8FAFC] dark:bg-slate-900 text-slate-700 dark:text-slate-200 antialiased min-h-screen flex flex-col transition-colors duration-300">
     <nav class="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 sticky top-0 z-50 shadow-sm">
@@ -42,7 +52,7 @@
                     </svg>
                     <div class="hidden sm:block">
                         <span class="text-xl font-bold tracking-tight text-slate-800 dark:text-white">Family<span class="text-emerald-500">Cafe.</span></span>
-                        <p class="text-xs text-slate-400 dark:text-slate-500 -mt-1">Ngopi bareng yuk!</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500 -mt-1">Transaksi tunai</p>
                     </div>
                 </a>
 
@@ -71,7 +81,7 @@
                         <span class="text-sm font-medium text-slate-700 dark:text-slate-200 hidden sm:block">{{ Auth::user()->name }}</span>
                     </div>
 
-                    <form method="POST" action="{{ route('logout') }}" class="flex items-center">
+                    <form method="POST" action="{{ route('logout') }}" class="flex items-center" data-confirm-logout>
                         @csrf
                         <button type="submit" class="p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-slate-700 transition-all" title="Logout">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -107,43 +117,175 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('globalState', () => ({
                 cart: Alpine.$persist([]).as('shopping_cart'),
+                cashReceived: 0,
                 get totalPrice() { return this.cart.reduce((total, item) => total + (item.price * item.qty), 0); },
                 get totalQty() { return this.cart.reduce((total, item) => total + item.qty, 0); },
+                get changeDue() { return (Number(this.cashReceived) || 0) - this.totalPrice; },
                 formatRupiah(number) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number); },
+                clearCart() { this.cart = []; this.cashReceived = 0; },
                 removeFromCart(index) {
                     this.cart.splice(index, 1);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil Dihapus!',
-                        text: 'Item berhasil dikeluarkan dari keranjang.',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
                 },
-                // Tambahkan fungsi untuk menambahkan/memperbarui item ke keranjang (opsional, tetapi berguna)
+                decreaseQty(index) {
+                    if (!this.cart[index]) return;
+                    if (this.cart[index].qty <= 1) {
+                        this.cart.splice(index, 1);
+                        return;
+                    }
+                    this.cart[index].qty--;
+                },
+                increaseQty(index) {
+                    if (!this.cart[index]) return;
+                    const maxStock = this.cart[index].maxStock;
+                    if (typeof maxStock === 'number' && this.cart[index].qty >= maxStock) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Stok Terbatas!',
+                            text: `Maksimal ${maxStock} untuk ${this.cart[index].name}`,
+                            confirmButtonColor: '#10b981'
+                        });
+                        return;
+                    }
+                    this.cart[index].qty++;
+                },
                 addToCart(product) {
                     const existingItemIndex = this.cart.findIndex(item => item.id === product.id);
 
+                    const maxStock = typeof product.maxStock === 'number' ? product.maxStock : undefined;
+
                     if (existingItemIndex !== -1) {
+                        const nextQty = this.cart[existingItemIndex].qty + 1;
+                        if (typeof maxStock === 'number' && nextQty > maxStock) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Stok Terbatas!',
+                                text: `Maksimal ${maxStock} untuk ${product.name}`,
+                                confirmButtonColor: '#10b981'
+                            });
+                            return;
+                        }
                         this.cart[existingItemIndex].qty++;
                     } else {
                         this.cart.push({
                             id: product.id,
                             name: product.name,
                             price: product.price,
-                            qty: 1
+                            qty: 1,
+                            maxStock
                         });
                     }
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Ditambahkan!',
-                        text: `${product.name} telah ditambahkan ke keranjang.`,
-                        showConfirmButton: false,
-                        timer: 1500
+                },
+                async checkoutCash() {
+                    if (!this.cart.length) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Keranjang kosong',
+                            text: 'Tambahkan item dulu sebelum checkout.'
+                        });
+                        return;
+                    }
+
+                    if (!this.cashReceived || this.cashReceived <= 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Uang diterima belum diisi',
+                            text: 'Masukkan uang yang diberikan pelanggan.'
+                        });
+                        return;
+                    }
+
+                    if (this.changeDue < 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Uang kurang',
+                            text: `Uang kurang ${this.formatRupiah(Math.abs(this.changeDue))}.`
+                        });
+                        return;
+                    }
+
+                    const confirmed = await Swal.fire({
+                        icon: 'question',
+                        title: 'Konfirmasi Checkout',
+                        html: `<div class="text-left">` +
+                              `<div class="flex justify-between"><span>Total item</span><b>${this.totalQty}</b></div>` +
+                              `<div class="flex justify-between mt-1"><span>Total bayar</span><b>${this.formatRupiah(this.totalPrice)}</b></div>` +
+                              `<div class="flex justify-between mt-1"><span>Tunai</span><b>${this.formatRupiah(this.cashReceived)}</b></div>` +
+                              `<div class="flex justify-between mt-1"><span>Kembalian</span><b>${this.formatRupiah(Math.max(this.changeDue, 0))}</b></div>` +
+                              `</div>`,
+                        showCancelButton: true,
+                        confirmButtonText: 'OK, Selesaikan',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#10b981'
                     });
+
+                    if (!confirmed.isConfirmed) return;
+
+                    try {
+                        const response = await fetch("{{ route('order.store') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.getAttribute('content') || "{{ csrf_token() }}",
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                cart: this.cart.map(i => ({ id: i.id, qty: i.qty })),
+                                cash_received: this.cashReceived
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (!response.ok) {
+                            throw new Error(data?.message || 'Checkout gagal');
+                        }
+
+                        this.clearCart();
+                        window.location.href = data.redirect_url;
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: error?.message || 'Terjadi kesalahan.'
+                        });
+                    }
                 }
             }))
         })
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('form[data-confirm-logout]').forEach((form) => {
+                form.addEventListener('submit', async (event) => {
+                    if (form.dataset.confirmed === '1') return;
+
+                    event.preventDefault();
+
+                    const title = form.getAttribute('data-confirm-title') || 'Yakin logout?';
+                    const text = form.getAttribute('data-confirm-text') || 'Kamu akan keluar dari akun ini.';
+
+                    if (window.Swal && typeof Swal.fire === 'function') {
+                        const result = await Swal.fire({
+                            icon: 'question',
+                            title,
+                            text,
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya, Logout',
+                            cancelButtonText: 'Batal',
+                            confirmButtonColor: '#ef4444'
+                        });
+
+                        if (!result.isConfirmed) return;
+                    } else {
+                        const ok = window.confirm(`${title}\n\n${text}`);
+                        if (!ok) return;
+                    }
+
+                    form.dataset.confirmed = '1';
+                    form.submit();
+                });
+            });
+        });
     </script>
     @stack('scripts')
 </body>

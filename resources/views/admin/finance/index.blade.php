@@ -126,7 +126,7 @@
 
     <!-- Margin Analysis -->
     @if (config('features.analisis_margin'))
-    <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm mb-8">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm ring-1 ring-slate-200/60 dark:ring-slate-700/60 mb-8">
         <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-3">
             <div class="p-2 bg-slate-100 rounded-xl">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -246,7 +246,7 @@
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="border-b border-slate-100">
+                    <tr class="border-b border-slate-100 dark:border-slate-700">
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Produk</th>
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Qty</th>
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Harga Jual</th>
@@ -257,9 +257,9 @@
                         <th class="text-right px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Detail</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                     @foreach($hppByProduct as $index => $product)
-                    <tr x-data="{ showDetail: false }" class="hover:bg-slate-50 transition-colors">
+                    <tr x-data="{ showDetail: false }" class="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors">
                         <td class="px-4 py-3 font-medium text-slate-800">{{ $product['name'] }}</td>
                         <td class="px-4 py-3 text-slate-600">{{ number_format($product['qty_sold']) }}</td>
                         <td class="px-4 py-3 text-slate-600">Rp {{ number_format($product['price'], 0, ',', '.') }}</td>
@@ -303,7 +303,7 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr class="bg-slate-100 font-bold">
+                    <tr class="bg-slate-100 dark:bg-slate-700/60 font-bold">
                         <td class="px-4 py-3 text-slate-800">TOTAL</td>
                         <td class="px-4 py-3 text-slate-600">{{ number_format(collect($hppByProduct)->sum('qty_sold')) }}</td>
                         <td class="px-4 py-3"></td>
@@ -327,13 +327,13 @@
 
     <!-- Top Products -->
     @if (config('features.top_produk'))
-    <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm mb-8">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm ring-1 ring-slate-200/60 dark:ring-slate-700/60 mb-8">
         <h2 class="text-xl font-bold text-slate-800 mb-6">Top 10 Produk Terlaris</h2>
         @if($revenueByProduct->count() > 0)
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="border-b border-slate-100">
+                    <tr class="border-b border-slate-100 dark:border-slate-700">
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">#</th>
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Produk</th>
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Qty Terjual</th>
@@ -341,9 +341,9 @@
                         <th class="text-left px-4 py-3 text-xs font-medium text-slate-400 uppercase tracking-wider">Kontribusi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                     @foreach($revenueByProduct as $index => $product)
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors">
                         <td class="px-4 py-3">
                             <span class="w-7 h-7 rounded-full {{ $index < 3 ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-600' }} inline-flex items-center justify-center text-sm font-bold">{{ $index + 1 }}</span>
                         </td>

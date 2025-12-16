@@ -26,10 +26,11 @@
     @endif
 
     <!-- Table Card -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-        <table class="w-full">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm ring-1 ring-slate-200/60 dark:ring-slate-700/60 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[720px]">
             <thead>
-                <tr class="border-b border-slate-100">
+                <tr class="border-b border-slate-100 dark:border-slate-700">
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Nama Bahan</th>
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Total Stok</th>
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Satuan</th>
@@ -37,31 +38,31 @@
                     <th class="text-right px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                 @forelse($ingredients as $item)
-                <tr class="hover:bg-slate-50 transition-colors">
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/40 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
                             </div>
-                            <span class="font-medium text-slate-800">{{ $item->name }}</span>
+                            <span class="font-medium text-slate-800 dark:text-white">{{ $item->name }}</span>
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="font-bold text-slate-800">{{ number_format($item->stock) }}</span>
+                        <span class="font-bold text-slate-800 dark:text-white">{{ number_format($item->stock) }}</span>
                         @if($item->stock < 500)
-                        <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                        <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-200">
                             ⚠️ Stok Rendah
                         </span>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-slate-600">{{ $item->unit }}</td>
+                    <td class="px-6 py-4 text-slate-600 dark:text-slate-300">{{ $item->unit }}</td>
                     <td class="px-6 py-4">
-                        <span class="text-slate-600">Rp {{ number_format($item->cost_per_unit, 0, ',', '.') }}</span>
-                        <span class="text-slate-400">/ {{ $item->unit }}</span>
+                        <span class="text-slate-600 dark:text-slate-300">Rp {{ number_format($item->cost_per_unit, 0, ',', '.') }}</span>
+                        <span class="text-slate-400 dark:text-slate-500">/ {{ $item->unit }}</span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center justify-end gap-3">
@@ -85,9 +86,9 @@
                 <tr>
                     <td colspan="5" class="px-6 py-16">
                         <div class="text-center">
-                            <div class="w-20 h-20 mx-auto rounded-full bg-slate-50 flex items-center justify-center text-4xl mb-6">📦</div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Belum Ada Bahan Baku</h3>
-                            <p class="text-slate-500 mb-6">Mulai tambahkan bahan baku untuk gudang Anda.</p>
+                            <div class="w-20 h-20 mx-auto rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-4xl mb-6">📦</div>
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Belum Ada Bahan Baku</h3>
+                            <p class="text-slate-500 dark:text-slate-400 mb-6">Mulai tambahkan bahan baku untuk gudang Anda.</p>
                             <a href="{{ route('admin.ingredients.create') }}" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -99,7 +100,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

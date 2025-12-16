@@ -38,8 +38,9 @@
     </div>
 
     <!-- Table Card -->
-    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
-        <table class="w-full">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm ring-1 ring-slate-200/60 dark:ring-slate-700/60 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[720px]">
             <thead>
                 <tr class="border-b border-slate-100 dark:border-slate-700">
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Produk</th>
@@ -111,7 +112,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
+            </table>
+        </div>
     </div>
 </div>
 @endsection

@@ -12,7 +12,7 @@
     <div class="w-full max-w-md">
 
         <div class="text-center mb-10">
-            <a href="{{ route('order.index') }}" class="inline-flex items-center gap-3 group">
+            <a href="{{ route('login') }}" class="inline-flex items-center gap-3 group">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-500" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12.0002 11.2426L7.75752 6.99998L6.34331 8.41419L12.0002 14.0711L17.657 8.41419L16.2428 6.99998L12.0002 11.2426Z" opacity="0.5"/>
                     <path d="M6 15C6 13.3431 7.34315 12 9 12H15C16.6569 12 18 13.3431 18 15V19C18 20.6569 16.6569 22 15 22H9C7.34315 22 6 20.6569 6 19V15Z" />
@@ -20,8 +20,8 @@
                 </svg>
                 <span class="text-3xl font-bold tracking-tight text-slate-800">Family<span class="text-emerald-500">Cafe.</span></span>
             </a>
-            <h1 class="text-2xl font-bold text-slate-800 mt-8">Selamat Datang Kembali!</h1>
-            <p class="text-slate-500 mt-2">Masuk untuk melanjutkan pesanan Anda.</p>
+            <h1 class="text-2xl font-bold text-slate-800 mt-8">Login Kasir</h1>
+            <p class="text-slate-500 mt-2">Masuk untuk mulai transaksi.</p>
         </div>
 
         <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-8 sm:p-10">
@@ -68,14 +68,9 @@
                 </button>
             </form>
 
-            <div class="relative my-8">
-                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
-                <div class="relative flex justify-center text-sm"><span class="px-4 bg-white text-slate-400">atau</span></div>
-            </div>
-
-            <p class="text-center text-slate-600">
+            <p class="text-center text-sm text-slate-500">
                 Belum punya akun?
-                <a href="{{ route('register') }}" class="text-emerald-500 hover:text-emerald-600 font-semibold transition-colors">Daftar yuk!</a>
+                <a href="{{ route('register') }}" class="text-emerald-500 hover:text-emerald-600 font-semibold">Daftar</a>
             </p>
         </div>
 

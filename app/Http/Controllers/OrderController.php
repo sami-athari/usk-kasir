@@ -19,15 +19,14 @@ class OrderController extends Controller
         return view('order.index', compact('products', 'categories'));
     }
 
-    // UPDATE: Store dengan Auth & Payment Method
+    // POS: pembayaran tunai (cash) saja
     public function store(Request $request)
     {
         $request->validate([
-            // Nama diambil otomatis dari Auth, jadi tidak perlu divalidasi dari input
-            'payment_method' => 'required|string|in:qris,gopay,dana,shopeepay,ovo',
             'cart'           => 'required|array',
             'cart.*.id'      => 'exists:products,id',
             'cart.*.qty'     => 'integer|min:1',
+            'cash_received'  => 'required|numeric|min:0',
         ]);
 
         try {
@@ -36,6 +35,7 @@ class OrderController extends Controller
                 $user = Auth::user(); // Ambil user yang sedang login
                 $totalPrice = 0;
                 $cartItems = $request->cart;
+                $cashReceived = (int) $request->input('cash_received', 0);
 
                 // 1. Cek Stok & Hitung Total
                 foreach ($cartItems as $item) {
@@ -55,6 +55,13 @@ class OrderController extends Controller
                     $totalPrice += $product->price * $item['qty'];
                 }
 
+                if ($cashReceived < $totalPrice) {
+                    $short = $totalPrice - $cashReceived;
+                    throw new \Exception('Uang yang diberikan kurang. Kurang Rp ' . number_format($short, 0, ',', '.') . '.');
+                }
+
+                $changeAmount = $cashReceived - $totalPrice;
+
                 // 2. Generate Antrean
                 $today = Carbon::today();
                 $lastOrder = Order::whereDate('created_at', $today)->orderBy('id', 'desc')->first();
@@ -67,7 +74,9 @@ class OrderController extends Controller
                     'customer_name' => $user->name,        // Nama User Login
                     'queue_number'  => $queueCode,
                     'total_price'   => $totalPrice,
-                    'payment_method' => $request->payment_method, // Simpan metode bayar
+                    'cash_received' => $cashReceived,
+                    'change_amount' => $changeAmount,
+                    'payment_method' => 'cash', // POS cash only
                     'status'        => 'paid',
                 ]);
 
@@ -109,7 +118,8 @@ class OrderController extends Controller
     // BARU: Halaman Riwayat Pesanan
     public function history()
     {
-        $orders = Order::where('user_id', Auth::id())
+        $orders = Order::with('items.product')
+            ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -118,6 +128,6 @@ class OrderController extends Controller
 
     public function checkout()
     {
-        return view('order.checkout');
+        return redirect()->route('order.index');
     }
 }

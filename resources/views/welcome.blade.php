@@ -160,7 +160,7 @@
         </div>
 
         <!-- Features Section -->
-        <section id="features" class="py-20 bg-white">
+        <section id="features" class="py-20 bg-[#F8FAFC]">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl font-bold text-slate-900 mb-4">Semua yang Anda Butuhkan</h2>

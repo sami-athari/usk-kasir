@@ -71,10 +71,11 @@
     </div>
 
     <!-- Table Card -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-        <table class="w-full">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm ring-1 ring-slate-200/60 dark:ring-slate-700/60 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-[720px]">
             <thead>
-                <tr class="border-b border-slate-100">
+                <tr class="border-b border-slate-100 dark:border-slate-700">
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Tanggal</th>
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Kategori</th>
                     <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Deskripsi</th>
@@ -82,19 +83,19 @@
                     <th class="text-right px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wider">Aksi</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
                 @forelse($expenses as $expense)
-                <tr class="hover:bg-slate-50 transition-colors">
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors">
                     <td class="px-6 py-4">
-                        <span class="text-slate-600">{{ $expense->expense_date->format('d M Y') }}</span>
+                        <span class="text-slate-600 dark:text-slate-300">{{ $expense->expense_date->format('d M Y') }}</span>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200">
                             {{ $categories[$expense->category] ?? $expense->category }}
                         </span>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="font-medium text-slate-800">{{ $expense->description }}</span>
+                        <span class="font-medium text-slate-800 dark:text-white">{{ $expense->description }}</span>
                     </td>
                     <td class="px-6 py-4">
                         <span class="font-bold text-red-500">Rp {{ number_format($expense->amount, 0, ',', '.') }}</span>
@@ -135,7 +136,8 @@
                 </tr>
                 @endforelse
             </tbody>
-        </table>
+            </table>
+        </div>
     </div>
 
     <!-- Pagination -->
